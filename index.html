@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Feliz Día de la Mujer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Raleway:wght@300;700&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #fce4ec;
+      font-family: 'Raleway', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .flores-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .flower {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      cursor: grab;
+      touch-action: none;
+      opacity: 0;
+    }
+
+    .petal {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background-color: pink;
+      border-radius: 50%;
+      top: 30px;
+      left: 30px;
+      transform-origin: bottom center;
+    }
+
+    .petal:nth-child(1) { transform: rotate(0deg); }
+    .petal:nth-child(2) { transform: rotate(60deg); }
+    .petal:nth-child(3) { transform: rotate(120deg); }
+    .petal:nth-child(4) { transform: rotate(180deg); }
+    .petal:nth-child(5) { transform: rotate(240deg); }
+    .petal:nth-child(6) { transform: rotate(300deg); }
+
+    .center {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: yellow;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-75%, +25%);
+    }
+
+    .mensaje {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 500px;
+      text-align: left;
+      color: #6a1b9a;
+      font-size: 1.5rem;
+      opacity: 1;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      font-family: 'Dancing Script', cursive;
+      color: #c2185b;
+      text-align: center;
+      opacity: 1;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      color: #880e4f;
+      text-align: center;
+      opacity: 1;
+    }
+
+    .linea {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      opacity: 0;
+    }
+
+    .linea span {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #c2185b;
+      width: 50px;
+      text-align: center;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="flores-container"></div>
+    <div class="mensaje">
+      <h2 id="paraTi">Para Ti</h2>
+      <div class="linea" id="linea1"><span>M</span> <p></p></div>
+      <div class="linea" id="linea2"><span>U</span> <p></p></div>
+      <div class="linea" id="linea3"><span>J</span> <p></p></div>
+      <div class="linea" id="linea4"><span>E</span> <p></p></div>
+      <div class="linea" id="linea5"><span>R</span> <p></p></div>
+      <h2 id="felizDia">Feliz Día</h2>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      const mensajes = [
+        "Maravillosa, que Dios creó en el mundo",
+        "Única e inigualable. Luchadora incansable.",
+        "Joya valiosa, que brilla como el sol.",
+        "Entregada, y comprometida con lo que más ama.",
+        "Retadora, guerrera, una Bendición de Dios."
+      ];
+
+      function mostrarMensajes() {
+        mensajes.forEach((mensaje, index) => {
+          setTimeout(() => {
+            gsap.to(`#linea${index + 1}`, { opacity: 1, duration: 1 });
+            escribirTexto(`#linea${index + 1} p`, mensaje, 50);
+          }, index * 2000);
+        });
+      }
+
+      function escribirTexto(selector, texto, velocidad) {
+        let i = 0;
+        let intervalo = setInterval(() => {
+          if (i < texto.length) {
+            $(selector).append(texto.charAt(i));
+            i++;
+          } else {
+            clearInterval(intervalo);
+          }
+        }, velocidad);
+      }
+
+      mostrarMensajes();
+
+      const numFloresMax = 20;
+      const floresContainer = document.querySelector(".flores-container");
+
+      function crearFlor(x, y) {
+        if (floresContainer.children.length >= numFloresMax) {
+          floresContainer.removeChild(floresContainer.children[0]);
+        }
+
+        let flower = document.createElement("div");
+        flower.classList.add("flower");
+        flower.style.left = x + "px";
+        flower.style.top = y + "px";
+
+        for (let j = 0; j < 6; j++) {
+          let petal = document.createElement("div");
+          petal.classList.add("petal");
+          flower.appendChild(petal);
+        }
+
+        let center = document.createElement("div");
+        center.classList.add("center");
+        flower.appendChild(center);
+
+        floresContainer.appendChild(flower);
+
+        gsap.to(flower, { opacity: 1, duration: 1 });
+        let dirX = (Math.random() - 0.5) * 200;
+        let dirY = (Math.random() - 0.5) * 200;
+
+        gsap.to(flower, {
+          x: `+=${dirX}`,
+          y: `+=${dirY}`,
+          repeat: -1,
+          duration: Math.random() * 3 + 1,
+          ease: "sine.inOut"
+        });
+
+        gsap.registerPlugin(Draggable);
+        Draggable.create(flower, { bounds: "body" });
+      }
+
+      setInterval(() => {
+        let x = Math.random() * window.innerWidth;
+        let y = Math.random() * window.innerHeight;
+        crearFlor(x, y);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
